@@ -7,6 +7,21 @@
 
 import SwiftUI
 
+struct MyStateObject {
+    let text: String
+}
+
+class ViewModel: ObservableObject {
+    @Published var myStateObject = MyStateObject(text: "")
+    @Published var text = ""
+    
+    func update() {
+        myStateObject = MyStateObject(text: String(Int.random(in: 0...10)))
+        text = String(Int.random(in: 0...10))
+    }
+    
+}
+
 struct ContentView: View {
     var body: some View {
         VStack {
@@ -19,8 +34,3 @@ struct ContentView: View {
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
-}
