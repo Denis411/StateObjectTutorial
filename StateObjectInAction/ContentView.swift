@@ -12,8 +12,8 @@ struct MyStateObject {
 }
 
 class ViewModel: ObservableObject {
-    @Published var myStateObject = MyStateObject(text: "")
-    @Published var text = ""
+    @Published var myStateObject = MyStateObject(text: "Initial state object")
+    @Published var text = "Initial text"
     
     func update() {
         myStateObject = MyStateObject(text: String(Int.random(in: 0...10)))
@@ -23,17 +23,22 @@ class ViewModel: ObservableObject {
 }
 
 struct ContentView: View {
-    @ObservableObject var vm = ViewModel()\
+    @ObservedObject var vm = ViewModel()
     
     var body: some View {
-        Button {
-            vm.update()
-        } label: {
-            Text("Update")
-                .padding(20)
-                .background(Color.green)
+        VStack {
+            HStack(spacing: 20) {
+                Text(vm.myStateObject.text)
+                Text(vm.text)
+            }
+            .fontWeight(.bold)
+            .font(.system(size: 35))
+            Button {
+                vm.update()
+            } label: {
+                Text("Update")
+            }
         }
-
     }
 }
 
