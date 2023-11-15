@@ -23,14 +23,17 @@ class ViewModel: ObservableObject {
 }
 
 struct ContentView: View {
+    @ObservableObject var vm = ViewModel()\
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        Button {
+            vm.update()
+        } label: {
+            Text("Update")
+                .padding(20)
+                .background(Color.green)
         }
-        .padding()
+
     }
 }
 
