@@ -7,8 +7,12 @@
 
 import SwiftUI
 
-struct MyStateObject {
-    let text: String
+class MyStateObject: ObservableObject {
+    var text: String = ""
+    
+    init(text: String) {
+        self.text = text
+    }
 }
 
 class ViewModel: ObservableObject {
@@ -23,12 +27,15 @@ class ViewModel: ObservableObject {
 }
 
 struct ContentView: View {
+    // this vm might be recreated because it is not a StateObject, but not in this app
     @ObservedObject var vm = ViewModel()
     
     var body: some View {
         VStack {
             HStack(spacing: 20) {
-                Text(vm.myStateObject.text)
+                // MyStateObjectView gets recreate here because vm.myStateObject gets update(has a new pointer)
+                // We ,however, can use a method right in MyStateObject to update its property
+                MyStateObjectView(stateObject: vm.myStateObject)
                 Text(vm.text)
             }
             .fontWeight(.bold)
@@ -42,3 +49,15 @@ struct ContentView: View {
     }
 }
 
+struct MyStateObjectView: View {
+    @StateObject var stateObject: MyStateObject
+    
+    var body: some View {
+        Text(stateObject.text)
+    }
+    
+    init(stateObject: MyStateObject) {
+        _stateObject = StateObject(wrappedValue: stateObject)
+        print("Created new MyStateObjectView")
+    }
+}
